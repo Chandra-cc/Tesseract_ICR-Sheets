@@ -1,0 +1,125 @@
+"Abhaya Libre" \
+"Abhaya Libre Bold" \
+"Abhaya Libre ExtraBold, Ultra-Bold" \
+"Abhaya Libre Medium, Medium" \
+"Abhaya Libre SemiBold, Semi-Bold" \
+"Amethysta" \
+"Belgrano" \
+"BioRhyme Expanded, Bold Expanded" \
+"BioRhyme Expanded, Expanded" \
+"BioRhyme Expanded, Light Expanded" \
+"BioRhyme Expanded, Light Expanded" \
+"BioRhyme Expanded, Ultra-Bold Expanded" \
+"Bitter" \
+"Bitter Bold" \
+"Bitter Italic" \
+"Enriqueta" \
+"Enriqueta Bold" \
+"IBM Plex Serif" \
+"IBM Plex Serif Bold" \
+"IBM Plex Serif Bold Italic" \
+"IBM Plex Serif ExtraLight, Ultra-Light" \
+"IBM Plex Serif ExtraLight, Ultra-Light Italic" \
+"IBM Plex Serif Italic" \
+"IBM Plex Serif Light, Light" \
+"IBM Plex Serif Light, Light Italic" \
+"IBM Plex Serif Medium, Medium" \
+"IBM Plex Serif Medium, Medium Italic" \
+"IBM Plex Serif SemiBold, Semi-Bold" \
+"IBM Plex Serif SemiBold, Semi-Bold Italic" \
+"IBM Plex Serif Thin, Thin" \
+"IBM Plex Serif Thin, Thin Italic" \
+"Itim" \
+"Leckerli One" \
+"Give You Glory" \
+"Hi Melody" \
+"Reenie Beanie Medium" \
+"Rock Salt" \
+"Sedgwick Ave Display" \
+"Shadows Into Light Two" \
+"Shadows Into Light," \
+"Waiting for the Sunrise Light" \
+"Zeyada" \
+"Aladin" \
+"Alex Brush" \
+"Allura" \
+"Amatic SC" \
+"Amatic SC Bold" \
+"Amita" \
+"Amita Bold" \
+"Annie Use Your Telescope" \
+"Architects Daughter" \
+"Arizonia" \
+"Bad Script" \
+"Berkshire Swash" \
+"Bilbo" \
+"Bilbo Swash Caps" \
+"Bonbon" \
+"Butterfly Kids" \
+"Calligraffitti" \
+"Caveat" \
+"Caveat Bold" \
+"Caveat Brush" \
+"Cedarville Cursive" \
+"Clicker Script" \
+"Coming Soon" \
+"Condiment" \
+"Cookie" \
+"Courgette" \
+"Covered By Your Grace" \
+"Crafty Girls" \
+"Damion" \
+"Dancing Script" \
+"Dancing Script Bold" \
+"Dawning of a New Day" \
+"Dekko" \
+"Delius" \
+"Delius Swash Caps" \
+"Delius Unicase" \
+"Delius Unicase Bold" \
+"Devonshire" \
+"Dokdo" \
+"Dr Sugiyama" \
+"Eagle Lake" \
+"East Sea Dokdo" \
+"Engagement" \
+"Euphoria Script" \
+"Felipa" \
+"Fondamento" \
+"Fondamento Italic" \
+"Gaegu" \
+"Gaegu Bold" \
+"Gaegu Light, Light" \
+"Arial Bold" \
+"Arial Bold Italic" \
+"Arial Italic" \
+"Arial" \
+"Courier New Bold" \
+"Courier New Bold Italic" \
+"Courier New Italic" \
+"Courier New" \
+"Times New Roman, Bold" \
+"Times New Roman, Bold Italic" \
+"Times New Roman, Italic" \
+"Times New Roman," \
+"Georgia Bold" \
+"Georgia Italic" \
+"Georgia" \
+"Georgia Bold Italic" \
+"Trebuchet MS Bold" \
+"Trebuchet MS Bold Italic" \
+"Trebuchet MS Italic" \
+"Trebuchet MS" \
+"Verdana Bold" \
+"Verdana Italic" \
+"Verdana" \
+"Verdana Bold Italic" \
+"URW Bookman L Bold" \
+"URW Bookman L Italic" \
+"URW Bookman L Bold Italic" \
+"Century Schoolbook L Bold" \
+"Century Schoolbook L Italic" \
+"Century Schoolbook L Bold Italic" \
+"Century Schoolbook L Medium" \
+"DejaVu Sans Ultra-Light" \
+"Aguafina Script" \

@@ -1,0 +1,214 @@
+STEPS TO BUILD TESSERACT :
+==========================
+
+
+Environment : Ubuntu 16.04 LTS
+------------------------------
+
+
+Compiling – GitInstallation
+--------------------------------
+
+https://github.com/tesseract-ocr/tesseract.wiki.git
+
+Installing Tesseract from Git
+-----------------------------
+These are the instructions for installing Tesseract from the git repository. YOU SHOULD BE READY TO FACE UNEXPECTED PROBLEMS.
+
+Installing With Autoconf Tools
+------------------------------
+In order to do this; you must have aclocal, autoheader, autoconf, automake, libtool, leptonica, and pkg-config installed. In addition, you need a C++ compiler.
+
+On Debian or Ubuntu, you can probably install all required packages like this:
+
+	sudo apt-get install autoconf automake g++ libtool libleptonica-dev make pkg-config
+
+The optional manpages are built with asciidoc:
+
+	sudo apt-get install asciidoc
+
+If you want to build the Tesseract training tools as well, you'll also require Pango:
+
+	sudo apt-get install libpango1.0-dev
+
+
+Afterwards, to clone the master branch to your computer, do this:
+
+	git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
+	git clone https://github.com/tesseract-ocr/langdata.git
+
+Finally, run these:
+
+    cd tesseract-ocr
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+    sudo ldconfig
+
+
+Building the Training Tools
+------------------------------
+If you're compiling Tesseract from source you need to make and install the training tools with separate make commands. 
+Once the above additional libraries have been installed, run the following from the Tesseract source directory:
+
+	make
+	make training
+	sudo make training-install
+
+
+It is also useful, but not required, to build ScrollView.jar:
+
+	make ScrollView.jar
+	export SCROLLVIEW_PATH=$PWD/java
+
+..........................................................................................................................................................
+
+TRAINING STEPS FOR TESSERACT 4.0.0-beta.1-376-gb1f79
+====================================================
+
+Check : Running tesseract -v in terminal gives:
+________________________________________________
+
+tesseract 4.0.0-beta.1-376-gb1f79
+ leptonica-1.74.1
+  libjpeg 8d (libjpeg-turbo 1.4.2) : libpng 1.2.54 : libtiff 4.0.6 : zlib 1.2.8
+
+ Found AVX2
+ Found AVX
+ Found SSE
+_____________________________________________________________________________
+
+Available : .tr, .box, .jpg files with proper name-format-extension
+_____________________________________________________________________________
+
+Language we are using : `dig` [for purpose of demonstration]
+____________________________________________________________
+
+[STEP 0][OPTIONAL] Delete the .tr files as they are no longer required in tesseract 4. Run from langdata/dig directory :
+
+  		 	rm *.tr
+
+[STEP 1] Manually edit the box files using JTESSBOXEDITOR to match the box file format for tesseract 4 (significantly different). The differences are - 
+         Use a white space to demarcate spaces between words and a newline character to signify end of a textline. Tesseract 4 takes input at textline level.
+
+[STEP 2] Since the box files are already available, generate the unicharset file by running the following (only for the digits folder).
+
+			unicharset_extractor  dig.f0.exp0.box dig.f1.exp0.box dig.f2.exp0.box dig.f3.exp0.box dig.f4.exp0.box dig.f5.exp0.box dig.f6.exp0.box dig.f7.exp0.box dig.f8.exp0.box dig.f9.exp0.box dig.f10.exp0.box dig.f11.exp0.box dig.f12.exp0.box dig.f13.exp0.box dig.f14.exp0.box dig.f15.exp0.box dig.f16.exp0.box dig.f17.exp0.box dig.f18.exp0.box dig.f19.exp0.box dig.f20.exp0.box dig.f21.exp0.box dig.f22.exp0.box dig.f23.exp0.box dig.f24.exp0.box dig.f25.exp0.box dig.f26.exp0.box dig.f27.exp0.box dig.f28.exp0.box dig.f29.exp0.box dig.f30.exp0.box dig.f31.exp0.box dig.f32.exp0.box dig.f33.exp0.box dig.f34.exp0.box dig.f35.exp0.box dig.f36.exp0.box
+ 		
+ 		The syntax of the command is 
+ 		unicharset_extractor [lang].[fontname].exp[num].box
+
+ 		This creates the unicharset file which will be required at the next step.
+
+[STEP 3] Generate the .lstmf files required by tesseract 4 to train itself.
+         Make sure you have lstm.train in tessdata/configs directory.
+		 Move into the langdata/dig directory and run the following sequence of commands in terminal:
+
+		 	img_files=$(ls *.jpg)  `#[Replace .jpg by .tif or .png i.e. the format of images you have available]`
+		 	OR
+		 	img_files=$(find -type f -name '*.png') `# for the cases when the argument list is too long (>128 kB)` 
+		 	for img_file in ${img_files}; do tesseract ${img_file} ${img_file%.*} 'lstm.train'; done
+
+		 This creates the .lstmf files which will be the files required by tesseract 4 for training.
+
+
+
+[STEP 4] Generate the starter [lang].traineddata, [lang].unicharset and [lang].charset=[ddd] files required to train Tesseract 4. 
+		 Run from langdata/dig :
+
+		 	combine_lang_model --input_unicharset unicharset --script_dir '..' --output_dir './digo' --lang dig
+		 
+ 			This will end with a warning:
+
+	 			Setting script properties
+				Config file is optional, continuing...
+				Failed to read data from: ../[lang]/[lang].config
+				Null char=2
+			But the files will be created.
+
+
+
+
+[STEP 5] List the .lstmf files created, so that tesseract gets the list of files it can train. Do it by :
+
+ 		 	ls *.lstmf>dig.training_files.txt `#[Syntax : "ls *.lstmf>[lang].training_files.txt"]`
+
+[STEP 6] Create the output directory.
+		
+		 	mkdir -p ~/tesstutorial/digoutput
+
+[STEP 7] Train tesseract 4 :
+
+			 lstmtraining --debug_interval 0   --traineddata ./digo/dig/dig.traineddata   --net_spec '[1,36,0,1 Ct3,3,16 Mp3,3 Lfys48 Lfx96 Lrx96 Lfx256 O1c111]'   --model_output ~/tesstutorial/digoutput/base --learning_rate 20e-4   --train_listfile ./dig.training_files.txt  --max_iterations 5000 &>~/tesstutorial/digoutput/basetrain.log
+
+[STEP 8][OPTIONAL] Monitor the training log file in a separate terminal :
+ 
+	      	tail -f ~/tesstutorial/digoutput/basetrain.log
+
+[STEP 9] Create the final traineddata file that is to be used :
+
+			lstmtraining --stop_training --continue_from ~/tesstutorial/digoutput/base3.262_1194.checkpoint --traineddata ./digo/dig/dig.traineddata --model_output ~/tesstutorial/digoutput/dig.traineddata
+
+[STEP 10][IMPORTANT] Move the traineddata file created to tessdata directory from where tesseract reads the languages.
+					Run from ~/tesstutorial/digoutput directory :
+
+					sudo cp dig.traineddata /usr/share/tesseract-ocr/tessdata/dig.traineddata
+
+
+RESULT : NOT SATISFACTORY
+
+............................................................................................................................................................
+
+WORKAROUND :  DOWNLOAD HANDWRITTEN FONTS FROM fonts.google.com AND TRAIN USING THE GENERAL PROCEDURE.
+
+			  THE TEXT CORPUS WAS CREATED BY TWEAKING THE CODE OF create_corpus.py AND STORING THE RESULT IN corpus.txt
+
+			  WHICH WAS THEN RENAMED TO [lang].training_text AND REPLACED IN langdata/[lang] DIRECTORY.
+
+
+[Step 1] Download the required fonts and install them on the system. For Linux Machine, copy the fonts to ~/.fonts directory and run <sudo fc-cache -rv> 			 from there.
+
+[Step 2] Get the fonts you want to train tesseract on by running the following command : 
+
+			text2image --find_fonts --fonts_dir /usr/share/fonts --text ./langdata/[lang]/[lang].training_text --min_coverage .9  --outputbase ./langdata/[lang]/[lang] |& grep raw  | sed -e 's/ :.*/@ \\/g'  | sed -e "s/^/  '/"  | sed -e "s/@/'/g" >path/to/langdata/[lang]/fontslist.txt
+
+[Step 3] Go to langdata/[lang]/fontslist.txt, open it and copy the contents. Paste the same in "language-specific.sh" under Latin fonts.
+			
+		Generate the format of the new fonts according to the convention mentioned in 
+
+		https://github.com/tesseract-ocr/tesseract/wiki/Training-Tesseract-3.03%E2%80%933.05#the-font_properties-file
+
+		and enlist them. Add the same to langdata/font_properties.
+
+
+ [Step 4] Generate starter traineddata by running the following command.
+
+ 			training/tesstrain.sh --lang eng --linedata_only   --noextract_font_properties --langdata_dir ~/langdata --output_dir ~/tesstutorial/newoutput
+
+ 			[Make sure to mention the full path of tesstrain.sh]
+
+
+[Step 5]  Run lstmtraining on the starter traineddata with the following command :
+
+		 training/lstmtraining --debug_interval 0   --traineddata ~/tesstutorial/newoutput/eng/eng.traineddata   --net_spec '[1,36,0,1 Ct3,3,16 Mp3,3 Lfys48 Lfx96 Lrx96 Lfx256 O1c111]'   --model_output ~/tesstutorial/newoutput/output/base --learning_rate 20e-4   --train_listfile ~/tesstutorial/newoutput/eng.training_files.txt  --max_iterations 10000 &>~/tesstutorial/newoutput/output/basetrain.log
+
+		 Follow the tesseract 4 official wiki to get details about all parameters that can be specified. This step will take a long time to complete.
+		 --debug_interval should be kept either 0 or -1 if ScrollView.jar was not made. Also make sure the output and input directories are writable and readable, respectively.
+
+[Step 6] Create the final traineddata that is used by the software by running the following command:
+
+		training/lstmtraining --stop_training --continue_from ~/tesstutorial/newoutput/output/base_checkpoint --traineddata ~/tesstutorial/newoutput/eng/eng.traineddata --model_output ~/tesstutorial/newoutput/output/eng.traineddata
+
+		[Again, make sure the complete path to lstmtraining is given to ensure the proper version is used.]
+
+[Step 7] Rename the eng.traineddata file to digits.traineddata and copy the same to tessdata directory from where tesseract reads the languages.
+		 To integrate with the Reader (in Windows) , copy it to tessdata directory.
+		 
+					Run from ~/tesstutorial/digoutput directory :
+
+					sudo cp digits.traineddata /usr/share/tesseract-ocr/tessdata/digits.traineddata
+
+
+ACCURACY ACHIEVED : ~ 90%-95%
+HIGHEST ACCURACY : 100%
